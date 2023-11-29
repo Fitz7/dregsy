@@ -19,10 +19,9 @@ package sync
 import (
 	"testing"
 
-	"github.com/xelalexv/dregsy/internal/pkg/test"
+	"github.com/Fitz7/dregsy/internal/pkg/test"
 )
 
-//
 func TestInvalidSync(t *testing.T) {
 
 	th := test.NewTestHelper(t)
@@ -32,7 +31,6 @@ func TestInvalidSync(t *testing.T) {
 		"relay 'docker' does not support mappings with 'platform: all'")
 }
 
-//
 func trySync(th *test.TestHelper, file, err string) (*Sync, error) {
 
 	test.StackTraceDepth = 2

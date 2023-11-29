@@ -24,11 +24,10 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xelalexv/dregsy/internal/pkg/auth"
-	"github.com/xelalexv/dregsy/internal/pkg/registry"
+	"github.com/Fitz7/dregsy/internal/pkg/auth"
+	"github.com/Fitz7/dregsy/internal/pkg/registry"
 )
 
-//
 type Location struct {
 	Registry      string            `yaml:"registry"`
 	Auth          string            `yaml:"auth"`
@@ -45,7 +44,6 @@ type Location struct {
 	creds *auth.Credentials
 }
 
-//
 func (l *Location) validate() error {
 
 	if l == nil {
@@ -131,7 +129,6 @@ func (l *Location) validate() error {
 	return nil
 }
 
-//
 func (l *Location) GetAuth() string {
 	if l.creds != nil {
 		return l.creds.Auth()
@@ -140,7 +137,6 @@ func (l *Location) GetAuth() string {
 	return ""
 }
 
-//
 func (l *Location) RefreshAuth() error {
 	if l.creds == nil {
 		return nil
@@ -149,17 +145,14 @@ func (l *Location) RefreshAuth() error {
 	return l.creds.Refresh()
 }
 
-//
 func (l *Location) IsECR() (bool, bool) {
 	return l.ecr, l.public
 }
 
-//
 func (l *Location) GetECR() (bool, bool, string, string) {
 	return l.ecr, l.public, l.region, l.account
 }
 
-//
 func (l *Location) IsGCR() bool {
 	return strings.HasSuffix(l.Registry, "gcr.io") ||
 		strings.HasSuffix(l.Registry, "-docker.pkg.dev")

@@ -24,10 +24,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xelalexv/dregsy/internal/pkg/sync"
+	"github.com/Fitz7/dregsy/internal/pkg/sync"
 )
 
-//
 func init() {
 
 	log.SetOutput(os.Stdout)
@@ -60,7 +59,6 @@ func init() {
 	}
 }
 
-//
 var DregsyVersion string
 
 // for invoking dregsy command during testing
@@ -69,12 +67,10 @@ var testArgs []string
 var testSync chan *sync.Sync
 var dregsyExitCode int
 
-//
 func version() {
 	log.Infof("dregsy %s", DregsyVersion)
 }
 
-//
 func main() {
 
 	dregsyExitCode = 0
@@ -114,7 +110,6 @@ func main() {
 	exit(0)
 }
 
-//
 func run(configFile, taskFilter string) (bool, error) {
 
 	version()
@@ -134,7 +129,6 @@ func run(configFile, taskFilter string) (bool, error) {
 	return restart, err
 }
 
-//
 func failOnError(err error) {
 	if err != nil {
 		log.Error(err)
@@ -142,7 +136,6 @@ func failOnError(err error) {
 	}
 }
 
-//
 func exit(code int) {
 	dregsyExitCode = code
 	if !testRound {

@@ -13,11 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+REGISTRY = gcr.io/faceit-general
 
 .DEFAULT_GOAL := help
 SHELL = /bin/bash
 
-REPO = dregsy
+REPO = dregsy-fork
 DREGSY_VERSION = $$(git describe --always --tag --dirty)
 SKOPEO_VERSION = v1.11.2 # https://github.com/containers/skopeo/releases
 
@@ -150,16 +151,16 @@ release: clean rmi dregsy imgdregsy imgtests tests registrydown
 publish:
 #	tag & push all container images belonging to a complete release
 #
-	docker tag xelalex/$(REPO):latest-alpine xelalex/$(REPO):$(DREGSY_VERSION)
-	docker tag xelalex/$(REPO):latest-alpine xelalex/$(REPO):$(DREGSY_VERSION)-alpine
-	docker tag xelalex/$(REPO):latest-ubuntu xelalex/$(REPO):$(DREGSY_VERSION)-ubuntu
+	docker tag $(REGISTRY)/$(REPO):latest-alpine $(REGISTRY)/$(REPO):$(DREGSY_VERSION)
+	docker tag $(REGISTRY)/$(REPO):latest-alpine $(REGISTRY)/$(REPO):$(DREGSY_VERSION)-alpine
+	docker tag $(REGISTRY)/$(REPO):latest-ubuntu $(REGISTRY)/$(REPO):$(DREGSY_VERSION)-ubuntu
 
-	docker push xelalex/$(REPO):latest
-	docker push xelalex/$(REPO):latest-alpine
-	docker push xelalex/$(REPO):$(DREGSY_VERSION)
-	docker push xelalex/$(REPO):$(DREGSY_VERSION)-alpine
-	docker push xelalex/$(REPO):latest-ubuntu
-	docker push xelalex/$(REPO):$(DREGSY_VERSION)-ubuntu
+	docker push $(REGISTRY)/$(REPO):latest
+	docker push $(REGISTRY)/$(REPO):latest-alpine
+	docker push $(REGISTRY)/$(REPO):$(DREGSY_VERSION)
+	docker push $(REGISTRY)/$(REPO):$(DREGSY_VERSION)-alpine
+	docker push $(REGISTRY)/$(REPO):latest-ubuntu
+	docker push $(REGISTRY)/$(REPO):$(DREGSY_VERSION)-ubuntu
 
 
 .PHONY: dregsy
@@ -183,14 +184,14 @@ imgdregsy:
 #	assumes binary was built
 #
 	echo -e "\nBuilding Alpine-based image...\n"
-	docker build -t xelalex/$(REPO):latest-alpine \
+	docker build -t $(REGISTRY)/$(REPO):latest-alpine \
 		--build-arg binaries=$(BINARIES) \
 		--build-arg SKOPEO_VERSION=$(SKOPEO_VERSION) \
 		-f ./hack/dregsy.alpine.Dockerfile .
-	# for historical reasons, the `xelalex/dregsy` image is the Alpine image
-	docker tag xelalex/$(REPO):latest-alpine xelalex/$(REPO):latest
+	# for historical reasons, the `$(REGISTRY)/dregsy` image is the Alpine image
+	docker tag $(REGISTRY)/$(REPO):latest-alpine $(REGISTRY)/$(REPO):latest
 	echo -e "\n\nBuilding Ubuntu-based image...\n"
-	docker build -t xelalex/$(REPO):latest-ubuntu \
+	docker build -t $(REGISTRY)/$(REPO):latest-ubuntu \
 		--build-arg binaries=$(BINARIES) \
 		--build-arg SKOPEO_VERSION=$(SKOPEO_VERSION) \
 		-f ./hack/dregsy.ubuntu.Dockerfile .
@@ -203,10 +204,10 @@ imgtests:
 #	assumes ${ITL}dregsy-...${NRM} images were built
 #
 	echo -e "\nBuilding Alpine-based test image...\n"
-	docker build -t xelalex/$(REPO)-tests-alpine \
+	docker build -t $(REGISTRY)/$(REPO)-tests-alpine \
 		-f ./hack/tests.alpine.Dockerfile .
 	echo -e "\n\nBuilding Ubuntu-based test image...\n"
-	docker build -t xelalex/$(REPO)-tests-ubuntu \
+	docker build -t $(REGISTRY)/$(REPO)-tests-ubuntu \
 		-f ./hack/tests.ubuntu.Dockerfile .
 	echo -e "\nDone\n"
 
@@ -215,11 +216,11 @@ imgtests:
 rmi:
 #	remove the ${ITL}dregsy${NRM} and testing container images
 #
-	docker rmi -f xelalex/$(REPO):latest
-	docker rmi -f xelalex/$(REPO):latest-alpine
-	docker rmi -f xelalex/$(REPO):latest-ubuntu
-	docker rmi -f xelalex/$(REPO)-tests-alpine
-	docker rmi -f xelalex/$(REPO)-tests-ubuntu
+	docker rmi -f $(REGISTRY)/$(REPO):latest
+	docker rmi -f $(REGISTRY)/$(REPO):latest-alpine
+	docker rmi -f $(REGISTRY)/$(REPO):latest-ubuntu
+	docker rmi -f $(REGISTRY)/$(REPO)-tests-alpine
+	docker rmi -f $(REGISTRY)/$(REPO)-tests-ubuntu
 
 
 .PHONY: rmitest

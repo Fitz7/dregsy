@@ -23,32 +23,27 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xelalexv/dregsy/internal/pkg/relays"
-	"github.com/xelalexv/dregsy/internal/pkg/util"
+	"github.com/Fitz7/dregsy/internal/pkg/relays"
+	"github.com/Fitz7/dregsy/internal/pkg/util"
 )
 
 const RelayID = "skopeo"
 
-//
 type RelayConfig struct {
 	Binary   string `yaml:"binary"`
 	CertsDir string `yaml:"certs-dir"`
 }
 
-//
 type Support struct{}
 
-//
 func (s *Support) Platform(p string) error {
 	return nil
 }
 
-//
 type SkopeoRelay struct {
 	wrOut io.Writer
 }
 
-//
 func NewSkopeoRelay(conf *RelayConfig, out io.Writer) *SkopeoRelay {
 
 	relay := &SkopeoRelay{}
@@ -68,7 +63,6 @@ func NewSkopeoRelay(conf *RelayConfig, out io.Writer) *SkopeoRelay {
 	return relay
 }
 
-//
 func (r *SkopeoRelay) Prepare() error {
 
 	bufOut := new(bytes.Buffer)
@@ -82,12 +76,10 @@ func (r *SkopeoRelay) Prepare() error {
 	return nil
 }
 
-//
 func (r *SkopeoRelay) Dispose() error {
 	return nil
 }
 
-//
 func (r *SkopeoRelay) Sync(opt *relays.SyncOptions) error {
 
 	srcCreds := util.DecodeJSONAuth(opt.SrcAuth)

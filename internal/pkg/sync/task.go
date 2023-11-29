@@ -23,10 +23,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xelalexv/dregsy/internal/pkg/registry"
+	"github.com/Fitz7/dregsy/internal/pkg/registry"
 )
 
-//
 type Task struct {
 	Name     string     `yaml:"name"`
 	Interval int        `yaml:"interval"`
@@ -44,7 +43,6 @@ type Task struct {
 	done chan bool
 }
 
-//
 func (t *Task) validate() error {
 
 	if len(t.Name) == 0 {
@@ -91,7 +89,6 @@ func (t *Task) validate() error {
 	return nil
 }
 
-//
 func (t *Task) startTicking(c chan *Task) {
 
 	logger := log.WithField("task", t.Name)
@@ -127,7 +124,6 @@ func (t *Task) startTicking(c chan *Task) {
 	}()
 }
 
-//
 func (t *Task) tooSoon() bool {
 	i := time.Duration(t.Interval)
 	if i == 0 {
@@ -136,7 +132,6 @@ func (t *Task) tooSoon() bool {
 	return time.Now().Before(t.lastTick.Add(time.Second * i / 2))
 }
 
-//
 func (t *Task) stopTicking() {
 	if t.ticker != nil {
 		t.ticker.Stop()
@@ -146,12 +141,10 @@ func (t *Task) stopTicking() {
 	log.WithField("task", t.Name).Debug("task exited")
 }
 
-//
 func (t *Task) fail(f bool) {
 	t.failed = t.failed || f
 }
 
-//
 func (t *Task) mappingRefs(m *Mapping) ([][2]string, error) {
 
 	var ret [][2]string
@@ -183,7 +176,6 @@ func (t *Task) mappingRefs(m *Mapping) ([][2]string, error) {
 	return ret, nil
 }
 
-//
 func (t *Task) ensureTargetExists(ref string) error {
 	log.WithField("ref", ref).Debug("ensuring target exists")
 	if isEcr, pub, region, account := t.Target.GetECR(); isEcr {

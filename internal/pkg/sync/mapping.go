@@ -21,14 +21,12 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/xelalexv/dregsy/internal/pkg/tags"
-	"github.com/xelalexv/dregsy/internal/pkg/util"
+	"github.com/Fitz7/dregsy/internal/pkg/tags"
+	"github.com/Fitz7/dregsy/internal/pkg/util"
 )
 
-//
 const RegexpPrefix = "regex:"
 
-//
 type Mapping struct {
 	From     string   `yaml:"from"`
 	To       string   `yaml:"to"`
@@ -41,7 +39,6 @@ type Mapping struct {
 	tagSet     *tags.TagSet
 }
 
-//
 func (m *Mapping) validate() error {
 
 	if m == nil {
@@ -89,7 +86,6 @@ func (m *Mapping) validate() error {
 	return nil
 }
 
-//
 func (m *Mapping) filterRepos(repos []string) []string {
 
 	if m.isRegexpFrom() {
@@ -105,7 +101,6 @@ func (m *Mapping) filterRepos(repos []string) []string {
 	return repos
 }
 
-//
 func (m *Mapping) mapPath(p string) string {
 	if m.isRegexpTo() {
 		return m.toFilter.ReplaceAllString(p, m.toReplace)
@@ -119,22 +114,18 @@ func (m *Mapping) mapPath(p string) string {
 	return p
 }
 
-//
 func (m *Mapping) isRegexpFrom() bool {
 	return isRegexp(m.From)
 }
 
-//
 func (m *Mapping) isRegexpTo() bool {
 	return isRegexp(m.To)
 }
 
-//
 func isRegexp(expr string) bool {
 	return strings.HasPrefix(expr, RegexpPrefix)
 }
 
-//
 func normalizePath(p string) string {
 	if strings.HasPrefix(p, "/") {
 		return p

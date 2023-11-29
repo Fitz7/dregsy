@@ -28,10 +28,9 @@ import (
 	awsecr "github.com/aws/aws-sdk-go/service/ecr"
 	awsecrpub "github.com/aws/aws-sdk-go/service/ecrpublic"
 
-	"github.com/xelalexv/dregsy/internal/pkg/util"
+	"github.com/Fitz7/dregsy/internal/pkg/util"
 )
 
-//
 func IsECR(registry string) (ecr, public bool, region, account string) {
 
 	if strings.HasSuffix(registry, "public.ecr.aws") {
@@ -63,7 +62,6 @@ func IsECR(registry string) (ecr, public bool, region, account string) {
 	return
 }
 
-//
 func newECR(registry, region, account string) ListSource {
 	return &ecr{
 		registry: registry,
@@ -72,14 +70,12 @@ func newECR(registry, region, account string) ListSource {
 	}
 }
 
-//
 type ecr struct {
 	registry string
 	region   string
 	account  string
 }
 
-//
 func (e *ecr) Retrieve(maxItems int) ([]string, error) {
 
 	log.Debug("ECR retrieving image list")
@@ -109,7 +105,6 @@ func (e *ecr) Retrieve(maxItems int) ([]string, error) {
 	return ret, nil
 }
 
-//
 func (e *ecr) Ping() error {
 	svc, err := e.getService()
 	if err != nil {
@@ -119,7 +114,6 @@ func (e *ecr) Ping() error {
 	return err
 }
 
-//
 func (e *ecr) getService() (*awsecr.ECR, error) {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -128,7 +122,6 @@ func (e *ecr) getService() (*awsecr.ECR, error) {
 	return awsecr.New(sess, &aws.Config{Region: aws.String(e.region)}), nil
 }
 
-//
 func CreateECRTarget(ref, region, account string, public bool) error {
 
 	_, repo, _ := util.SplitRef(ref)
@@ -148,7 +141,6 @@ func CreateECRTarget(ref, region, account string, public bool) error {
 	}
 }
 
-//
 func createECRPubTarget(sess *session.Session, ref, repo, region, account string) error {
 
 	svc := awsecrpub.New(sess, &aws.Config{
@@ -192,7 +184,6 @@ func createECRPubTarget(sess *session.Session, ref, repo, region, account string
 	return err
 }
 
-//
 func createECRTarget(sess *session.Session, ref, repo, region, account string) error {
 
 	svc := awsecr.New(sess, &aws.Config{

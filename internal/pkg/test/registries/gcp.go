@@ -31,16 +31,14 @@ import (
 	gcrgoogle "github.com/google/go-containerregistry/pkg/v1/google"
 	gcrremote "github.com/google/go-containerregistry/pkg/v1/remote"
 
-	"github.com/xelalexv/dregsy/internal/pkg/test"
+	"github.com/Fitz7/dregsy/internal/pkg/test"
 )
 
-//
 type manifest struct {
 	Digest string
 	Info   gcrgoogle.ManifestInfo
 }
 
-//
 func SkipIfGCPNotConfigured(t *testing.T, gcr, gar bool) {
 
 	var missing []string
@@ -66,7 +64,6 @@ func SkipIfGCPNotConfigured(t *testing.T, gcr, gar bool) {
 	}
 }
 
-//
 func EmptyGCRRepo(t *testing.T, p *test.Params) {
 	repo, err := gcrname.NewRepository(
 		fmt.Sprintf("%s/%s/%s", p.GCRHost, p.GCRProject, p.GCRImage))
@@ -76,7 +73,6 @@ func EmptyGCRRepo(t *testing.T, p *test.Params) {
 	emptyGCPRepo(t, repo)
 }
 
-//
 func EmptyGARRepo(t *testing.T, p *test.Params) {
 	repo, err := gcrname.NewRepository(
 		fmt.Sprintf("%s/%s/%s", p.GARHost, p.GARProject, p.GARImage))

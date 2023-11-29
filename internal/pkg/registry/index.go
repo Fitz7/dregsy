@@ -24,10 +24,9 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/registry"
 
-	"github.com/xelalexv/dregsy/internal/pkg/auth"
+	"github.com/Fitz7/dregsy/internal/pkg/auth"
 )
 
-//
 func newIndex(reg, filter string, insecure bool, creds *auth.Credentials) ListSource {
 
 	ret := &index{filter: filter}
@@ -54,14 +53,12 @@ func newIndex(reg, filter string, insecure bool, creds *auth.Credentials) ListSo
 	return ret
 }
 
-//
 type index struct {
 	opts   *registry.ServiceOptions
 	auth   *types.AuthConfig
 	filter string
 }
 
-//
 func (i *index) Retrieve(maxItems int) ([]string, error) {
 
 	svc, err := registry.NewService(*i.opts)
@@ -84,7 +81,6 @@ func (i *index) Retrieve(maxItems int) ([]string, error) {
 	return ret, nil
 }
 
-//
 func (i *index) Ping() error {
 	svc, err := registry.NewService(*i.opts)
 	if err != nil {
@@ -96,7 +92,6 @@ func (i *index) Ping() error {
 	return nil
 }
 
-//
 func isDockerHub(reg string) bool {
 	return reg == "" || reg == "docker.com" || reg == "docker.io" ||
 		strings.HasSuffix(reg, ".docker.com") ||

@@ -24,16 +24,14 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xelalexv/dregsy/internal/pkg/auth"
+	"github.com/Fitz7/dregsy/internal/pkg/auth"
 )
 
-//
 type DHRepoList struct {
 	Items    []DHRepoDescriptor `json:"results",required`
 	NextPage string             `json:"next",omitempty`
 }
 
-//
 type DHRepoDescriptor struct {
 	User        string `json:"user",required`
 	Name        string `json:"name",required`
@@ -55,17 +53,14 @@ type DHRepoDescriptor struct {
 	// affiliation 			string
 }
 
-//
 func newDockerhub(creds *auth.Credentials) ListSource {
 	return &dockerhub{creds: creds}
 }
 
-//
 type dockerhub struct {
 	creds *auth.Credentials
 }
 
-//
 func (d *dockerhub) Retrieve(maxItems int) ([]string, error) {
 
 	var err error
@@ -118,13 +113,11 @@ func (d *dockerhub) Retrieve(maxItems int) ([]string, error) {
 	}
 }
 
-//
 func (d *dockerhub) Ping() error {
 	_, err := d.getToken()
 	return err
 }
 
-//
 func (d *dockerhub) getToken() (*auth.Token, error) {
 
 	log.Debug("getting token")

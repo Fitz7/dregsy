@@ -25,27 +25,24 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xelalexv/dregsy/internal/pkg/relays"
-	"github.com/xelalexv/dregsy/internal/pkg/relays/docker"
-	"github.com/xelalexv/dregsy/internal/pkg/relays/skopeo"
-	"github.com/xelalexv/dregsy/internal/pkg/util"
+	"github.com/Fitz7/dregsy/internal/pkg/relays"
+	"github.com/Fitz7/dregsy/internal/pkg/relays/docker"
+	"github.com/Fitz7/dregsy/internal/pkg/relays/skopeo"
+	"github.com/Fitz7/dregsy/internal/pkg/util"
 )
 
-//
 type Relay interface {
 	Prepare() error
 	Dispose() error
 	Sync(opt *relays.SyncOptions) error
 }
 
-//
 type Sync struct {
 	relay    Relay
 	shutdown chan bool
 	ticks    chan bool
 }
 
-//
 func New(conf *SyncConfig) (*Sync, error) {
 
 	sync := &Sync{}
@@ -82,13 +79,11 @@ func New(conf *SyncConfig) (*Sync, error) {
 	return sync, nil
 }
 
-//
 func (s *Sync) Shutdown() {
 	s.shutdown <- true
 	s.WaitForTick()
 }
 
-//
 func (s *Sync) tick() {
 	select {
 	case s.ticks <- true:
@@ -96,17 +91,14 @@ func (s *Sync) tick() {
 	}
 }
 
-//
 func (s *Sync) WaitForTick() {
 	<-s.ticks
 }
 
-//
 func (s *Sync) Dispose() {
 	s.relay.Dispose()
 }
 
-//
 func (s *Sync) SyncFromConfig(conf *SyncConfig, taskFilter string) (bool, error) {
 
 	if taskFilter == "" {
@@ -224,7 +216,6 @@ func (s *Sync) SyncFromConfig(conf *SyncConfig, taskFilter string) (bool, error)
 	return restart, nil
 }
 
-//
 func (s *Sync) syncTask(t *Task) {
 
 	if t.tooSoon() {

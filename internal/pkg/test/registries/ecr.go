@@ -26,11 +26,10 @@ import (
 	"github.com/aws/aws-sdk-go/service/ecr"
 	"github.com/aws/aws-sdk-go/service/ecrpublic"
 
-	"github.com/xelalexv/dregsy/internal/pkg/sync"
-	"github.com/xelalexv/dregsy/internal/pkg/test"
+	"github.com/Fitz7/dregsy/internal/pkg/sync"
+	"github.com/Fitz7/dregsy/internal/pkg/test"
 )
 
-//
 func SkipIfECRNotConfigured(t *testing.T, public bool) {
 	var missing []string
 	if os.Getenv(test.EnvAccessKeyID) == "" {
@@ -52,7 +51,6 @@ func SkipIfECRNotConfigured(t *testing.T, public bool) {
 	}
 }
 
-//
 func RemoveECRRepo(t *testing.T, p *test.Params, public bool) {
 
 	var loc *sync.Location

@@ -1,4 +1,4 @@
-module github.com/xelalexv/dregsy
+module github.com/Fitz7/dregsy
 
 go 1.20
 

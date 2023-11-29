@@ -17,10 +17,9 @@
 package relays
 
 import (
-	"github.com/xelalexv/dregsy/internal/pkg/tags"
+	"github.com/Fitz7/dregsy/internal/pkg/tags"
 )
 
-//
 type SyncOptions struct {
 	//
 	SrcRef           string
@@ -36,7 +35,6 @@ type SyncOptions struct {
 	Verbose  bool
 }
 
-//
 type Support interface {
 	Platform(p string) error
 }

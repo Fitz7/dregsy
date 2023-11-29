@@ -25,18 +25,15 @@ import (
 	"github.com/blang/semver/v4"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xelalexv/dregsy/internal/pkg/util"
+	"github.com/Fitz7/dregsy/internal/pkg/util"
 )
 
-//
 const SemverPrefix = "semver:"
 const RegexpPrefix = "regex:"
 const KeepPrefix = "keep:"
 
-//
 var keepCount *util.Regex
 
-//
 func init() {
 	var err error
 	if keepCount, err = util.NewRegex(
@@ -45,7 +42,6 @@ func init() {
 	}
 }
 
-//
 func NewTagSet(tags []string) (*TagSet, error) {
 	ret := &TagSet{}
 	if err := ret.add(tags); err != nil {
@@ -54,7 +50,6 @@ func NewTagSet(tags []string) (*TagSet, error) {
 	return ret, nil
 }
 
-//
 type TagSet struct {
 	verbatim  []string
 	semver    []semver.Range
@@ -63,7 +58,6 @@ type TagSet struct {
 	keepCount int
 }
 
-//
 func (ts *TagSet) add(tags []string) error {
 
 	for _, t := range tags {
@@ -100,12 +94,10 @@ func (ts *TagSet) add(tags []string) error {
 	return nil
 }
 
-//
 func (ts *TagSet) addVerbatim(v string) {
 	ts.verbatim = append(ts.verbatim, v)
 }
 
-//
 func (ts *TagSet) addSemver(s string) error {
 	if r, e := semver.ParseRange(s[len(SemverPrefix):]); e != nil {
 		return e
@@ -115,13 +107,11 @@ func (ts *TagSet) addSemver(s string) error {
 	}
 }
 
-//
 func (ts *TagSet) addRegex(r string) (err error) {
 	ts.regex, err = ts.addFilter(r, RegexpPrefix, ts.regex)
 	return
 }
 
-//
 func (ts *TagSet) setKeepCount(c string) (err error) {
 	if p := strings.Split(c, " "); len(p) > 1 {
 		ts.keepCount, err = strconv.Atoi(p[len(p)-1])
@@ -131,13 +121,11 @@ func (ts *TagSet) setKeepCount(c string) (err error) {
 	return
 }
 
-//
 func (ts *TagSet) addKeep(k string) (err error) {
 	ts.keep, err = ts.addFilter(k, KeepPrefix, ts.keep)
 	return
 }
 
-//
 func (ts *TagSet) addFilter(regex, prefix string, list []*util.Regex) (
 	[]*util.Regex, error) {
 
@@ -149,32 +137,26 @@ func (ts *TagSet) addFilter(regex, prefix string, list []*util.Regex) (
 	}
 }
 
-//
 func (ts *TagSet) IsEmpty() bool {
 	return !ts.HasVerbatim() && !ts.HasSemver() && !ts.HasRegex()
 }
 
-//
 func (ts *TagSet) HasVerbatim() bool {
 	return len(ts.verbatim) > 0
 }
 
-//
 func (ts *TagSet) HasSemver() bool {
 	return len(ts.semver) > 0
 }
 
-//
 func (ts *TagSet) HasRegex() bool {
 	return len(ts.regex) > 0
 }
 
-//
 func (ts *TagSet) NeedsExpansion() bool {
 	return ts.IsEmpty() || ts.HasSemver() || ts.HasRegex()
 }
 
-//
 func (ts *TagSet) Expand(lister func() ([]string, error)) ([]string, error) {
 
 	set := make(map[string]string)
@@ -233,7 +215,6 @@ func (ts *TagSet) Expand(lister func() ([]string, error)) ([]string, error) {
 	return ret, nil
 }
 
-//
 func (ts *TagSet) expandSemver(tags []string) []string {
 
 	vers := make(versions, 0, len(tags))
@@ -261,7 +242,6 @@ func (ts *TagSet) expandSemver(tags []string) []string {
 	return ret
 }
 
-//
 func (ts *TagSet) reduce(tags []string, limit int) []string {
 
 	vers := make(versions, 0, len(tags))
@@ -303,7 +283,6 @@ func (ts *TagSet) reduce(tags []string, limit int) []string {
 	return tags
 }
 
-//
 func (ts *TagSet) expandRegex(tags []string) []string {
 
 	var ret []string
@@ -320,7 +299,6 @@ func (ts *TagSet) expandRegex(tags []string) []string {
 	return ret
 }
 
-//
 func (ts *TagSet) keepTag(t string) bool {
 	for _, regex := range ts.keep {
 		if !regex.Matches(t) {
@@ -330,29 +308,24 @@ func (ts *TagSet) keepTag(t string) bool {
 	return true
 }
 
-//
 func addToSet(s map[string]string, tags []string) {
 	for _, t := range tags {
 		s[t] = t
 	}
 }
 
-//
 func isSemver(tag string) bool {
 	return strings.HasPrefix(tag, SemverPrefix)
 }
 
-//
 func isRegex(tag string) bool {
 	return strings.HasPrefix(tag, RegexpPrefix)
 }
 
-//
 func isKeep(tag string) bool {
 	return strings.HasPrefix(tag, KeepPrefix)
 }
 
-//
 func isKeepCount(tag string) bool {
 	return keepCount.Matches(tag)
 }

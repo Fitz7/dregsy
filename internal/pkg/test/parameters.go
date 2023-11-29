@@ -19,10 +19,9 @@ package test
 import (
 	"os"
 
-	"github.com/xelalexv/dregsy/internal/pkg/auth"
+	"github.com/Fitz7/dregsy/internal/pkg/auth"
 )
 
-//
 const (
 	// Docker setup
 	EnvDockerHost = "DREGSY_TEST_DOCKERHOST"
@@ -53,7 +52,6 @@ const (
 	EnvDockerhubPass = "DREGSY_TEST_DOCKERHUB_PASS"
 )
 
-//
 type Params struct {
 	DockerHost     string
 	ECRRegistry    string
@@ -70,7 +68,6 @@ type Params struct {
 	LocalAuth      string
 }
 
-//
 func GetParams() *Params {
 
 	ret := &Params{

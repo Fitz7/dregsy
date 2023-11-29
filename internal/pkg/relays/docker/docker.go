@@ -31,10 +31,9 @@ import (
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh/terminal"
 
-	"github.com/xelalexv/dregsy/internal/pkg/util"
+	"github.com/Fitz7/dregsy/internal/pkg/util"
 )
 
-//
 type image struct {
 	id   string
 	reg  string
@@ -42,17 +41,14 @@ type image struct {
 	tags []string
 }
 
-//
 func (s *image) ref() string {
 	return fmt.Sprintf("%s/%s", s.reg, s.repo)
 }
 
-//
 func (s *image) refWithTags() string {
 	return fmt.Sprintf("%s/%s:%v", s.reg, s.repo, s.tags)
 }
 
-//
 type dockerClient struct {
 	host    string
 	version string
@@ -61,7 +57,6 @@ type dockerClient struct {
 	wrOut   io.Writer
 }
 
-//
 func newClient(host, version string, out io.Writer) (*dockerClient, error) {
 	dc := &dockerClient{
 		host:    host,
@@ -75,7 +70,6 @@ func newClient(host, version string, out io.Writer) (*dockerClient, error) {
 	return dc, e
 }
 
-//
 func newEnvClient() (*dockerClient, error) {
 	dc := &dockerClient{
 		env:   true,
@@ -85,7 +79,6 @@ func newEnvClient() (*dockerClient, error) {
 	return dc, err
 }
 
-//
 func (dc *dockerClient) open() (err error) {
 	if dc.client == nil {
 		if dc.env {
@@ -97,7 +90,6 @@ func (dc *dockerClient) open() (err error) {
 	return
 }
 
-//
 func (dc *dockerClient) ping(attempts int, sleep time.Duration) (
 	res types.Ping, err error) {
 
@@ -116,7 +108,6 @@ func (dc *dockerClient) ping(attempts int, sleep time.Duration) (
 		attempts, err)
 }
 
-//
 func (dc *dockerClient) close() error {
 	if dc.client != nil {
 		return dc.client.Close()
@@ -124,7 +115,6 @@ func (dc *dockerClient) close() error {
 	return nil
 }
 
-//
 func (dc *dockerClient) listImages(ref string) (list []*image, err error) {
 
 	log.WithField("ref", ref).Debug("listing images")
@@ -182,7 +172,6 @@ func (dc *dockerClient) listImages(ref string) (list []*image, err error) {
 	return
 }
 
-//
 func match(filterReg, filterRepo, filterTag, ref string) (bool, error) {
 
 	if ref == "<none>:<none>" || ref == "<none>@<none>" {
@@ -207,7 +196,6 @@ func match(filterReg, filterRepo, filterTag, ref string) (bool, error) {
 		(filterTag == "" || filterTag == tag), nil
 }
 
-//
 func (dc *dockerClient) pullImage(ref string, allTags bool, platform, auth string,
 	verbose bool) error {
 	opts := &types.ImagePullOptions{
@@ -219,7 +207,6 @@ func (dc *dockerClient) pullImage(ref string, allTags bool, platform, auth strin
 	return dc.handleLog(rc, err, verbose)
 }
 
-//
 func (dc *dockerClient) pushImage(image string, allTags bool, platform, auth string,
 	verbose bool) error {
 
@@ -234,12 +221,10 @@ func (dc *dockerClient) pushImage(image string, allTags bool, platform, auth str
 	return dc.handleLog(rc, err, verbose)
 }
 
-//
 func (dc *dockerClient) tagImage(source, target string) error {
 	return dc.client.ImageTag(context.Background(), source, target)
 }
 
-//
 func (dc *dockerClient) handleLog(rc io.ReadCloser, err error, verbose bool) error {
 
 	if err != nil {

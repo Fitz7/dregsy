@@ -19,10 +19,9 @@ package sync
 import (
 	"testing"
 
-	"github.com/xelalexv/dregsy/internal/pkg/test"
+	"github.com/Fitz7/dregsy/internal/pkg/test"
 )
 
-//
 func TestValidSyncConfigs(t *testing.T) {
 
 	th := test.NewTestHelper(t)
@@ -38,7 +37,6 @@ func TestValidSyncConfigs(t *testing.T) {
 	th.AssertEqual("docker", c.Relay)
 }
 
-//
 func TestInvalidSyncConfigs(t *testing.T) {
 
 	th := test.NewTestHelper(t)
@@ -68,7 +66,6 @@ func TestInvalidSyncConfigs(t *testing.T) {
 	tryConfig(th, "config/mapping-no-from.yaml", "mapping without 'From' path")
 }
 
-//
 func tryConfig(th *test.TestHelper, file, err string) (*SyncConfig, error) {
 
 	test.StackTraceDepth = 2

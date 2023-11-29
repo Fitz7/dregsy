@@ -25,14 +25,13 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xelalexv/dregsy/internal/pkg/relays/skopeo"
-	"github.com/xelalexv/dregsy/internal/pkg/sync"
-	"github.com/xelalexv/dregsy/internal/pkg/test"
-	"github.com/xelalexv/dregsy/internal/pkg/test/registries"
-	"github.com/xelalexv/dregsy/internal/pkg/util"
+	"github.com/Fitz7/dregsy/internal/pkg/relays/skopeo"
+	"github.com/Fitz7/dregsy/internal/pkg/sync"
+	"github.com/Fitz7/dregsy/internal/pkg/test"
+	"github.com/Fitz7/dregsy/internal/pkg/test/registries"
+	"github.com/Fitz7/dregsy/internal/pkg/util"
 )
 
-//
 var testPlatforms []string = []string{
 	"linux/amd64",
 	"linux/386",
@@ -44,25 +43,21 @@ var testPlatforms []string = []string{
 	"linux/arm64/v8",
 }
 
-//
 func TestE2EOneoff(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/oneoff.yaml",
 		0, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2EDocker(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/docker.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2EDockerPlatform(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/docker-platform.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2EDockerECR(t *testing.T) {
 	registries.SkipIfECRNotConfigured(t, false)
 	p := test.GetParams()
@@ -72,7 +67,6 @@ func TestE2EDockerECR(t *testing.T) {
 	registries.RemoveECRRepo(t, p, false)
 }
 
-//
 func TestE2EDockerECRPub(t *testing.T) {
 	registries.SkipIfECRNotConfigured(t, true)
 	p := test.GetParams()
@@ -82,13 +76,11 @@ func TestE2EDockerECRPub(t *testing.T) {
 	registries.RemoveECRRepo(t, p, true)
 }
 
-//
 func TestE2EDockerECRPubNoAuth(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/docker-ecr-pub-noauth.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2EDockerGCR(t *testing.T) {
 	registries.SkipIfGCPNotConfigured(t, true, false)
 	p := test.GetParams()
@@ -98,13 +90,11 @@ func TestE2EDockerGCR(t *testing.T) {
 	registries.EmptyGCRRepo(t, p)
 }
 
-//
 func TestE2EDockerGCRNoAuth(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/docker-gcr-noauth.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2EDockerGAR(t *testing.T) {
 	registries.SkipIfGCPNotConfigured(t, false, true)
 	p := test.GetParams()
@@ -114,13 +104,11 @@ func TestE2EDockerGAR(t *testing.T) {
 	registries.EmptyGARRepo(t, p)
 }
 
-//
 func TestE2EDockerGARNoAuth(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/docker-gar-noauth.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2EDockerMappingDockerhub(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/mapping/docker-dockerhub.yaml",
 		0, 0, true, map[string][]string{
@@ -130,7 +118,6 @@ func TestE2EDockerMappingDockerhub(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2EDockerMappingLocal(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/mapping/docker-local.yaml",
 		0, 0, true, map[string][]string{
@@ -140,7 +127,6 @@ func TestE2EDockerMappingLocal(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2EDockerMappingDockerhubSearch(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/mapping/docker-dh-search.yaml",
 		0, 0, true, map[string][]string{
@@ -149,7 +135,6 @@ func TestE2EDockerMappingDockerhubSearch(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2EDockerMappingECR(t *testing.T) {
 	registries.SkipIfECRNotConfigured(t, false)
 	tryConfig(test.NewTestHelper(t), "e2e/mapping/docker-ecr.yaml",
@@ -160,7 +145,6 @@ func TestE2EDockerMappingECR(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2EDockerTagSetsRange(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/tagsets/docker-range.yaml",
 		0, 0, true, map[string][]string{
@@ -172,7 +156,6 @@ func TestE2EDockerTagSetsRange(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2EDockerTagSetsPrune(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/tagsets/docker-prune.yaml",
 		0, 0, true, map[string][]string{
@@ -183,7 +166,6 @@ func TestE2EDockerTagSetsPrune(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2EDockerTagSetsRegex(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/tagsets/docker-regex.yaml",
 		0, 0, true, map[string][]string{
@@ -195,7 +177,6 @@ func TestE2EDockerTagSetsRegex(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2EDockerTagSetsLimit(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/tagsets/docker-limit.yaml",
 		0, 0, true, map[string][]string{
@@ -207,7 +188,6 @@ func TestE2EDockerTagSetsLimit(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2EDockerTagSetsDigest(t *testing.T) {
 
 	// NOTE: Docker does not allow push by digest reference, we therefore
@@ -231,25 +211,21 @@ func TestE2EDockerTagSetsDigest(t *testing.T) {
 	})
 }
 
-//
 func TestE2ESkopeo(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/skopeo.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2ESkopeoPlatform(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/skopeo-platform.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2ESkopeoAllPlatforms(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/skopeo-platform-all.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2ESkopeoECR(t *testing.T) {
 	registries.SkipIfECRNotConfigured(t, false)
 	p := test.GetParams()
@@ -259,7 +235,6 @@ func TestE2ESkopeoECR(t *testing.T) {
 	registries.RemoveECRRepo(t, p, false)
 }
 
-//
 func TestE2ESkopeoECRPub(t *testing.T) {
 	registries.SkipIfECRNotConfigured(t, true)
 	p := test.GetParams()
@@ -269,13 +244,11 @@ func TestE2ESkopeoECRPub(t *testing.T) {
 	registries.RemoveECRRepo(t, p, true)
 }
 
-//
 func TestE2ESkopeoECRPubNoAuth(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/skopeo-ecr-pub-noauth.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2ESkopeoGCR(t *testing.T) {
 	registries.SkipIfGCPNotConfigured(t, true, false)
 	p := test.GetParams()
@@ -285,13 +258,11 @@ func TestE2ESkopeoGCR(t *testing.T) {
 	registries.EmptyGCRRepo(t, p)
 }
 
-//
 func TestE2ESkopeoGCRNoAuth(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/skopeo-gcr-noauth.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2ESkopeoGAR(t *testing.T) {
 	registries.SkipIfGCPNotConfigured(t, false, true)
 	p := test.GetParams()
@@ -301,13 +272,11 @@ func TestE2ESkopeoGAR(t *testing.T) {
 	registries.EmptyGARRepo(t, p)
 }
 
-//
 func TestE2ESkopeoGARNoAuth(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/base/skopeo-gar-noauth.yaml",
 		1, 0, true, nil, test.GetParams())
 }
 
-//
 func TestE2ESkopeoMappingDockerhub(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/mapping/skopeo-dockerhub.yaml",
 		0, 0, true, map[string][]string{
@@ -317,7 +286,6 @@ func TestE2ESkopeoMappingDockerhub(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2ESkopeoMappingLocal(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/mapping/skopeo-local.yaml",
 		0, 0, true, map[string][]string{
@@ -327,7 +295,6 @@ func TestE2ESkopeoMappingLocal(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2ESkopeoMappingDockerhubSearch(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/mapping/skopeo-dh-search.yaml",
 		0, 0, true, map[string][]string{
@@ -336,7 +303,6 @@ func TestE2ESkopeoMappingDockerhubSearch(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2ESkopeoMappingECR(t *testing.T) {
 	registries.SkipIfECRNotConfigured(t, false)
 	tryConfig(test.NewTestHelper(t), "e2e/mapping/skopeo-ecr.yaml",
@@ -347,7 +313,6 @@ func TestE2ESkopeoMappingECR(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2ESkopeoTagSetsRange(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/tagsets/skopeo-range.yaml",
 		0, 0, true, map[string][]string{
@@ -359,7 +324,6 @@ func TestE2ESkopeoTagSetsRange(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2ESkopeoTagSetsPrune(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/tagsets/skopeo-prune.yaml",
 		0, 0, true, map[string][]string{
@@ -370,7 +334,6 @@ func TestE2ESkopeoTagSetsPrune(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2ESkopeoTagSetsRegex(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/tagsets/skopeo-regex.yaml",
 		0, 0, true, map[string][]string{
@@ -382,7 +345,6 @@ func TestE2ESkopeoTagSetsRegex(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2ESkopeoTagSetsLimit(t *testing.T) {
 	tryConfig(test.NewTestHelper(t), "e2e/tagsets/skopeo-limit.yaml",
 		0, 0, true, map[string][]string{
@@ -394,7 +356,6 @@ func TestE2ESkopeoTagSetsLimit(t *testing.T) {
 		test.GetParams())
 }
 
-//
 func TestE2ESkopeoTagSetsDigest(t *testing.T) {
 
 	th := test.NewTestHelper(t)
@@ -414,7 +375,6 @@ func TestE2ESkopeoTagSetsDigest(t *testing.T) {
 	})
 }
 
-//
 func tryConfig(th *test.TestHelper, file string, ticks int, wait time.Duration,
 	verify bool, expectations map[string][]string, data interface{}) *sync.SyncConfig {
 
@@ -449,7 +409,6 @@ func tryConfig(th *test.TestHelper, file string, ticks int, wait time.Duration,
 	return c
 }
 
-//
 func validateAgainstExpectations(th *test.TestHelper, c *sync.SyncConfig,
 	expectations map[string][]string) {
 
@@ -470,7 +429,6 @@ func validateAgainstExpectations(th *test.TestHelper, c *sync.SyncConfig,
 	}
 }
 
-//
 func validateAgainstTaskMapping(th *test.TestHelper, c *sync.SyncConfig) {
 
 	for _, t := range c.Tasks {
@@ -487,7 +445,6 @@ func validateAgainstTaskMapping(th *test.TestHelper, c *sync.SyncConfig) {
 	}
 }
 
-//
 func validatePlatforms(th *test.TestHelper, ref string, task *sync.Task,
 	mapping *sync.Mapping) {
 
@@ -534,7 +491,6 @@ func validatePlatforms(th *test.TestHelper, ref string, task *sync.Task,
 	}
 }
 
-//
 func validateDigests(th *test.TestHelper, c *sync.SyncConfig,
 	expectations map[string][]string) {
 
@@ -556,7 +512,6 @@ func validateDigests(th *test.TestHelper, c *sync.SyncConfig,
 	}
 }
 
-//
 func prepareConfig(src, dst string, data interface{}) error {
 
 	tmpl, err := template.ParseFiles(src)
@@ -573,7 +528,6 @@ func prepareConfig(src, dst string, data interface{}) error {
 	return tmpl.Execute(out, data)
 }
 
-//
 func runDregsy(th *test.TestHelper, ticks int, wait time.Duration,
 	args ...string) int {
 

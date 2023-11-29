@@ -29,10 +29,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xelalexv/dregsy/internal/pkg/auth"
+	"github.com/Fitz7/dregsy/internal/pkg/auth"
 )
 
-//
 func newCatalog(reg string, insecure, bearer bool,
 	creds *auth.Credentials) ListSource {
 
@@ -50,7 +49,6 @@ func newCatalog(reg string, insecure, bearer bool,
 	}
 }
 
-//
 type catalog struct {
 	registry string
 	conf     *oauth2.Config
@@ -59,7 +57,6 @@ type catalog struct {
 	creds    *auth.Credentials
 }
 
-//
 func (c *catalog) Retrieve(maxItems int) ([]string, error) {
 
 	reg, err := gocrname.NewRegistry(c.registry)
@@ -110,7 +107,6 @@ func (c *catalog) Retrieve(maxItems int) ([]string, error) {
 	}
 }
 
-//
 func (c *catalog) Ping() error {
 	// TODO: possibly use this to get token for push/pull?
 	_, err := c.conf.PasswordCredentialsToken(
